@@ -8,8 +8,8 @@ const threadSchema = new mongoose.Schema({
     text : { type: String },
     delete_password : { type: String },
     created_on : { type: String },
-    bumped_on : { type: date },
-    reported : { type: boolean },
+    bumped_on : { type: Date },
+    reported : { type: Boolean },
     replies : {
       type: [String]
     }
@@ -20,8 +20,8 @@ const replySchema = new mongoose.Schema({
     text : { type: String },
     delete_password : { type: String },
     created_on : { type: String },
-    bumped_on : { type: date },
-    reported : { type: boolean }
+    bumped_on : { type: Date },
+    reported : { type: Boolean }
 });
 
 let thread = mongoose.model("Threads", threadSchema);
