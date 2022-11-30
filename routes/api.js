@@ -51,10 +51,16 @@ module.exports = function (app) {
       .sort({created_on:-1})
       .limit(10)
       .select({delete_password : 0, reported : 0})
-      .exec(function(err, data) {
+      .exec(function(err, maindata) {
       if (err) return console.error(err);
       //console.log(data);
-      return res.json(data);
+      maindata.map(function(data){
+        if(data.replycount>3){
+          let rep = data.replies;
+          data.replies = rep.slice(rep.length-3,rep.length);
+        }
+      });
+      return res.json(maindata);
     });
     
   })
@@ -180,7 +186,7 @@ module.exports = function (app) {
                        "text":replydata.text,
                        "created_on":dateOP});
 
-        console.log(newReplies);
+        //console.log(newReplies);
         thread.findByIdAndUpdate(thread_id,
           {bumped_on:dateOP,replies:newReplies,replycount:data.replycount+1},
           {new:true},
@@ -229,7 +235,7 @@ module.exports = function (app) {
               i.text = "[deleted]";
             } });
 
-            thread.findByIdAndUpdate(thread_id,
+          thread.findByIdAndUpdate(thread_id,
           {replies:newReplies},
           {new:true},
           function(err, newdata) {
